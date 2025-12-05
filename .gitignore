@@ -28,3 +28,4 @@ frontend/yarn-error.log*
 
 ## backend gitignore
 backend/src/.env
+backend/src/db/createAdmin.js

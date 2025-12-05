@@ -43,7 +43,7 @@ function Home() {
             <h3 style={{ color: 'var(--accent-primary)' }}>{project.title}</h3>
             <p style={{ margin: '1rem 0', color: 'var(--text-secondary)' }}>{project.description}</p>
             <div>
-              <strong>Tech Stack:</strong> {project.techStack.join(', ')}
+              <strong>Tech Stack:</strong> {project.tech_stack.join(', ')}
             </div>
           </div>
         ))}
