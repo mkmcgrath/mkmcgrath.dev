@@ -5,6 +5,7 @@ const pool = require('./db/connection');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const authenticateToken = require('./middleware/auth');
 
 //create express app
 const app = express();
@@ -122,6 +123,46 @@ app.post('/auth/login', async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 });
+
+// admin routes (protected with JWT)
+
+// POST /admin/projects - create new project
+app.post('/admin/projects', authenticateToken, async (req, res) => {
+  try {
+    const { title, description, tech_stack, links, tags } = req.body;
+
+    const result = await pool.query('INSERT INTO projects (title, description, tech_stack, links, tags) VALUES($1, $2, $3, $4, $5) RETURNING *',
+      [title, description, tech_stack, links, tags]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating project:', err);
+    res.status(500).json({ error: 'Failed to create project' });
+  }
+});
+
+// PUT /admin/projects/:id - update existing project
+app.put('/admin/projects/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, tech_stack, links, tags } = req.body;
+
+    const result = await pool.query('UPDATE projects SET title = $1, description = $2, tech_stack = $3, links = $4, tags = $5 WHERE id = $6 RETURNING *', [title, description, tech_stack, links, tags, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error updating project:', err);
+    res.status(500).json({ error: 'Failed to update project' });
+  }
+});
+
+
 
 
 // start server
