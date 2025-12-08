@@ -179,6 +179,65 @@ app.delete('/admin/projects/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// POST /admin/blog - create new blog post
+app.post('/admin/blog', authenticateToken, async (req, res) => {
+  try {
+    const { title, content, excerpt, tags } = req.body;
+
+    const result = await pool.query(
+      'INSERT INTO blog_posts (title, content, excerpt, tags) VALUES($1, $2, $3, $4) RETURNING *',
+      [title, content, excerpt, tags]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating blog post:', err);
+    res.status(500).json({ error: 'Failed to create blog post' });
+  }
+});
+
+// PUT /admin/blog/:id - update existing blog post
+app.put('/admin/blog/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, excerpt, tags } = req.body;
+
+    const result = await pool.query(
+      'UPDATE blog_posts SET title = $1, content = $2, excerpt = $3, tags = $4 WHERE id = $5 RETURNING *',
+      [title, content, excerpt, tags, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error updating blog post:', err);
+    res.status(500).json({ error: 'Failed to update blog post' });
+  }
+});
+
+// DELETE /admin/blog/:id - delete blog post
+app.delete('/admin/blog/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(
+      'DELETE FROM blog_posts WHERE id = $1 RETURNING id, title',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    res.json({ message: 'Blog post deleted successfully', blog_post: result.rows[0] });
+  } catch (err) {
+    console.error('Error deleting blog post:', err);
+    res.status(500).json({ error: 'Failed to delete blog post' });
+  }
+});
+
 
 // start server
 const PORT = process.env.PORT || 5000;
