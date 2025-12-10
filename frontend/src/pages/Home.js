@@ -21,6 +21,8 @@ function Home() {
     fetchProjects();
   }, []);
 
+
+  // if loading, show loading projects status
   if (loading) {
     return <div>Loading projects...</div>;
   }
