@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import ProjectManagement from '../components/ProjectManagement';
+import BlogManagement from '../components/BlogManagement';
 import './Admin.css';
 
 function Admin() {
@@ -90,6 +92,9 @@ function Admin() {
     );
   }
 
+  // Tabs state
+  const [activeTab, setActiveTab] = useState('projects');
+
   // Show dashboard if authenticated
   return (
     <div className="admin-container">
@@ -104,24 +109,24 @@ function Admin() {
           </button>
         </div>
 
-        <div className="dashboard-grid">
-          <div className="dashboard-card">
-            <h3>Manage Projects</h3>
-            <p>Create, edit, and delete projects</p>
-            <button className="card-action">Coming Soon</button>
-          </div>
+        <div className="admin-tabs">
+          <button
+            className={`tab-button ${activeTab === 'projects' ? 'active' : ''}`}
+            onClick={() => setActiveTab('projects')}
+          >
+            Projects
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'blog' ? 'active' : ''}`}
+            onClick={() => setActiveTab('blog')}
+          >
+            Blog Posts
+          </button>
+        </div>
 
-          <div className="dashboard-card">
-            <h3>Manage Blog Posts</h3>
-            <p>Create, edit, and delete blog posts</p>
-            <button className="card-action">Coming Soon</button>
-          </div>
-
-          <div className="dashboard-card">
-            <h3>Analytics</h3>
-            <p>View site statistics and metrics</p>
-            <button className="card-action">Coming Soon</button>
-          </div>
+        <div className="admin-content">
+          {activeTab === 'projects' && <ProjectManagement />}
+          {activeTab === 'blog' && <BlogManagement />}
         </div>
       </div>
     </div>
