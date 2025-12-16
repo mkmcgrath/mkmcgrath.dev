@@ -1,5 +1,6 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 function Home() {
   const [projects, setProjects] = useState([]);
@@ -8,7 +9,7 @@ function Home() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/projects');
+        const response = await fetch(`${API_URL}/api/projects`);
         const data = await response.json();
         setProjects(data);
         setLoading(false);

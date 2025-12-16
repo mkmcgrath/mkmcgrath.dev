@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './AdminManagement.css';
+import API_URL from '../config';
 
 function BlogManagement() {
   const { token } = useAuth();
@@ -21,7 +22,7 @@ function BlogManagement() {
   // Fetch all blog posts
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/blog');
+      const response = await fetch(`${API_URL}/api/blog`);
       if (!response.ok) throw new Error('Failed to fetch blog posts');
       const data = await response.json();
       setPosts(data);
@@ -89,8 +90,8 @@ function BlogManagement() {
 
     try {
       const url = editingPost
-        ? `http://localhost:5000/admin/blog/${editingPost.id}`
-        : 'http://localhost:5000/admin/blog';
+        ? `${API_URL}/admin/blog/${editingPost.id}`
+        : `${API_URL}/admin/blog`;
 
       const response = await fetch(url, {
         method: editingPost ? 'PUT' : 'POST',
@@ -123,7 +124,7 @@ function BlogManagement() {
     setSuccess('');
 
     try {
-      const response = await fetch(`http://localhost:5000/admin/blog/${id}`, {
+      const response = await fetch(`${API_URL}/admin/blog/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

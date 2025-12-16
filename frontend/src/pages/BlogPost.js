@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import './BlogPost.css';
+import API_URL from '../config';
 
 function BlogPost() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ function BlogPost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/blog/${id}`);
+        const response = await fetch(`${API_URL}/api/blog/${id}`);
         if (!response.ok) {
           throw new Error('Blog post not found');
         }

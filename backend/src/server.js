@@ -18,6 +18,19 @@ app.use(express.json()); // allows json parsing in requests
 app.use(morgan('dev'));
 
 // routes
+
+// friendly test route
+
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Portfolio API is running',
+    version: '1.0.0'
+  });
+});
+
+
+
 app.get('/api/projects', async (req, res) => {
   try {
     const result = await pool.query(

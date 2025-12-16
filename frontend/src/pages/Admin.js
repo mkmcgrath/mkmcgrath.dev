@@ -9,6 +9,7 @@ function Admin() {
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [activeTab, setActiveTab] = useState('projects');
 
   const handleInputChange = (e) => {
     setLoginForm({
@@ -91,9 +92,6 @@ function Admin() {
       </div>
     );
   }
-
-  // Tabs state
-  const [activeTab, setActiveTab] = useState('projects');
 
   // Show dashboard if authenticated
   return (

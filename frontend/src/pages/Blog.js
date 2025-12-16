@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Blog.css';
+import API_URL from '../config';
 
 function Blog() {
   const [posts, setPosts] = useState([]);
@@ -10,7 +11,7 @@ function Blog() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/blog');
+        const response = await fetch(`${API_URL}/api/blog`);
         if (!response.ok) {
           throw new Error('Failed to fetch blog posts');
         }

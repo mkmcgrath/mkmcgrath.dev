@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './AdminManagement.css';
+import API_URL from '../config';
 
 function ProjectManagement() {
   const { token } = useAuth();
@@ -23,7 +24,7 @@ function ProjectManagement() {
   // Fetch all projects
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/projects');
+      const response = await fetch(`${API_URL}/api/projects`);
       if (!response.ok) throw new Error('Failed to fetch projects');
       const data = await response.json();
       setProjects(data);
@@ -99,8 +100,8 @@ function ProjectManagement() {
 
     try {
       const url = editingProject
-        ? `http://localhost:5000/admin/projects/${editingProject.id}`
-        : 'http://localhost:5000/admin/projects';
+        ? `${API_URL}/admin/projects/${editingProject.id}`
+        : `${API_URL}/admin/projects`;
 
       const response = await fetch(url, {
         method: editingProject ? 'PUT' : 'POST',
@@ -133,7 +134,7 @@ function ProjectManagement() {
     setSuccess('');
 
     try {
-      const response = await fetch(`http://localhost:5000/admin/projects/${id}`, {
+      const response = await fetch(`${API_URL}/admin/projects/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
